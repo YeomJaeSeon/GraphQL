@@ -7,7 +7,6 @@ export class CategoryController {
 
   @Post('category')
   create(@Body('name') name: string) {
-    console.log(name);
     return this.categoryService.create(name);
   }
 

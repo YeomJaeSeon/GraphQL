@@ -11,10 +11,10 @@ import { ActorModule } from './actor/actor.module';
 
 @Module({
   imports: [
-    // GraphQLModule.forRoot({
-    //   driver: ApolloDriver,
-    //   autoSchemaFile: join(process.cwd(), 'src/schema.gql'), // code first -> graphql schema 자동생성 (typescript class를 통해)
-    // }),
+    GraphQLModule.forRoot({
+      driver: ApolloDriver,
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'), // code first -> graphql schema 자동생성 (typescript class를 통해)
+    }),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: '127.0.0.1',

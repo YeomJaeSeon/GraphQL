@@ -1,9 +1,10 @@
+import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Movie } from 'src/movie/entities/movie.entity';
 import {
   Column,
   Entity,
+  In,
   ManyToMany,
-  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -20,34 +21,50 @@ export enum Country {
   FRANCE = 'FRANCE',
 }
 
+registerEnumType(Gender, {
+  name: 'Gender',
+});
+
+registerEnumType(Country, {
+  name: 'Country',
+});
+
 @Entity()
+@ObjectType()
 export class Actor {
   @PrimaryGeneratedColumn()
+  @Field(() => Int)
   id: number;
 
   @Column()
+  @Field()
   name: string;
 
   @Column('enum', {
     nullable: true,
     enum: Gender,
   })
+  @Field(() => Gender)
   gender: Gender;
 
   @Column({ nullable: true })
+  @Field(() => Int)
   age: number;
 
   @Column('enum', {
     nullable: true,
     enum: Country,
   })
+  @Field(() => Country)
   country: Country;
 
   @Column({
     nullable: true,
   })
+  @Field(() => Int)
   career: number;
 
   @ManyToMany(() => Movie, (movie) => movie.actors)
+  @Field(() => [Movie])
   movies: Movie[];
 }

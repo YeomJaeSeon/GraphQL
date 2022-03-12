@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateActorDto } from './dtos/create-actor.dto';
@@ -21,6 +21,10 @@ export class ActorService {
   }
 
   async findById(id: number): Promise<Actor> {
-    return await this.actorRepository.findOne({ id });
+    const foundActor = await this.actorRepository.findOne({ id });
+    if (!foundActor) {
+      throw new NotFoundException(`#${id}의 배우 없음`);
+    }
+    return foundActor;
   }
 }

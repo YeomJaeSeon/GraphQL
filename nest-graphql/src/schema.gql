@@ -2,66 +2,69 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type CompanyEntity {
+type Category {
   id: Int!
   name: String!
-  location: String!
-  ceo: String!
-  yearOfEstablishment: Int!
-  employees: [EmployeeEntity!]!
+  movies: [Movie!]!
 }
 
-type EmployeeEntity {
+type Movie {
+  id: Int!
+  title: String!
+  rating: Int!
+  description: String!
+  actors: [Actor!]!
+  category: Category!
+}
+
+type Actor {
   id: Int!
   name: String!
+  gender: Gender!
   age: Int!
-  gender: GENDER!
-  totalWorkTime: Int!
-  role: ROLE!
-  part: PART!
-  salary: Int!
-  vacationCount: Int!
-  isBald: Int!
-  height: Int
-  weight: Int
+  country: Country!
+  career: Int!
+  movies: [Movie!]!
 }
 
-enum GENDER {
+enum Gender {
   MALE
   FEMALE
 }
 
-enum ROLE {
-  CREW
-  LEAD
+enum Country {
+  SOUTH_KOREA
+  AMERICA
+  JAPAN
+  CHINA
+  FRANCE
 }
 
-enum PART {
-  DEVELOPER
-  DESIGNER
-  PLANNER
+type DeleteMovieDto {
+  message: String!
 }
 
 type Query {
-  employees: [EmployeeEntity!]!
-  employee(id: Int!): EmployeeEntity!
-  company(id: Int!): CompanyEntity!
+  movies: [Movie!]!
+  movie(id: Int!): Movie!
 }
 
 type Mutation {
-  createEmployeeWithInputType(createEmployeeInput: CreateEmployeeDto!): EmployeeEntity!
+  createMovie(createMovieInput: CreateMovieDto!): Movie!
+  updateMovie(id: Int!, updateMovieInput: UpdateMovieDto!): Movie!
+  deleteMovie(id: Int!): DeleteMovieDto!
 }
 
-input CreateEmployeeDto {
-  name: String!
-  age: Int!
-  gender: GENDER!
-  totalWorkTime: Int!
-  role: ROLE!
-  part: PART!
-  salary: Int!
-  vacationCount: Int!
-  isBald: Int!
-  height: Int
-  weight: Int
+input CreateMovieDto {
+  title: String!
+  rating: Int!
+  description: String!
+  actorIds: [Int!]!
+  categoryId: Int!
+}
+
+input UpdateMovieDto {
+  title: String
+  rating: Int
+  description: String
 }
