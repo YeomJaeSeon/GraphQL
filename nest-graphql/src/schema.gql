@@ -1,0 +1,67 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type CompanyEntity {
+  id: Int!
+  name: String!
+  location: String!
+  ceo: String!
+  yearOfEstablishment: Int!
+  employees: [EmployeeEntity!]!
+}
+
+type EmployeeEntity {
+  id: Int!
+  name: String!
+  age: Int!
+  gender: GENDER!
+  totalWorkTime: Int!
+  role: ROLE!
+  part: PART!
+  salary: Int!
+  vacationCount: Int!
+  isBald: Int!
+  height: Int
+  weight: Int
+}
+
+enum GENDER {
+  MALE
+  FEMALE
+}
+
+enum ROLE {
+  CREW
+  LEAD
+}
+
+enum PART {
+  DEVELOPER
+  DESIGNER
+  PLANNER
+}
+
+type Query {
+  employees: [EmployeeEntity!]!
+  employee(id: Int!): EmployeeEntity!
+  company(id: Int!): CompanyEntity!
+}
+
+type Mutation {
+  createEmployeeWithInputType(createEmployeeInput: CreateEmployeeDto!): EmployeeEntity!
+}
+
+input CreateEmployeeDto {
+  name: String!
+  age: Int!
+  gender: GENDER!
+  totalWorkTime: Int!
+  role: ROLE!
+  part: PART!
+  salary: Int!
+  vacationCount: Int!
+  isBald: Int!
+  height: Int
+  weight: Int
+}
