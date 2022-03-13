@@ -77,7 +77,7 @@ query{
 
 ## 개발 생산성 문맥에서의 GraphQL 도입
 
-#### 팀원간 단순한 요청이 필요가 없다.
+#### 1. 팀원간 단순한 요청이 필요가 없다.
 
 먼저 우리 팀이 프로젝트를 시작할 때 어떤 방식으로 프로젝트를 시작하는지, 어떤 문제가 발생하여 개발 생산성이 저하될 수 있는지 알아보자.
 
@@ -101,7 +101,7 @@ api 수정해달라는 요청은 비교적 사소하고 단순한 문제라 생�
 
 > 이렇게 GraphQL을 도입하면 단순한 요청에 대한 프로세스를 없애, 개발자들의 개발 생산성을 높일 수있다.
 
-#### api end point에 대한 고민을 줄여준다.
+#### 2. api end point에 대한 고민을 줄여준다.
 - REST API는 URI를 통해 리소스를 명시하고, HTTP Method로 리소스에 CRUD operation을 적용한다.
 
 하나의 예로, 공업사의 전체 리뷰를 조회하는 api의 end point는 `GET /v1/repair/shop/:shopId/review` 이다. (갑자기 든생각인데, api end point가 ~/reviews이면 더 좋을 거 같다는 생각이 든다.)
@@ -130,7 +130,7 @@ query{
 
 > GraphQL을 이용하면 api end point를 좀더 직관적으로 가져갈 수 있고, 정하는데 소모되는 비용을 줄여주기에, 개발 생산성을 높여줄 것이라 생각한다.
 
-#### api 명세를 만드는데 걸리는 시간을 줄여준다.
+#### 3. api 명세를 만드는데 걸리는 시간을 줄여준다.
 - GraphQL을 이용하면 graphql-playground라는 developer tool을 제공해준다. (예제를 실행했을 때, localhost:3000/graphql 을 요청하면 응답하는 페이지가 그것이다.) 이 developer tool은 오른쪽에 docs, schema를 누르면 어떤 스키마들이 존재하는지, query root 타입에는 어떤 스키마들이 있고 어떻게 요청 할수 있는지, 파라미터엔 뭘 넣어 요청 해야하는지 알려준다.
 <img width="1785" alt="스크린샷 2022-03-13 오후 5 57 12" src="https://user-images.githubusercontent.com/67785334/158052399-176969c4-983d-44af-99a5-fa14932d982d.png">
 
