@@ -1,0 +1,23 @@
+# object type
+type Actor {
+  id: Int!
+  name: String!
+  gender: Gender!
+  age: Int!
+  country: Country!
+  career: Int!
+  movies: [Movie!]!
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum Country {
+  SOUTH_KOREA
+  AMERICA
+  JAPAN
+  CHINA
+  FRANCE
+}

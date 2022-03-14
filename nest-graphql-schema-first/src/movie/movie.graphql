@@ -1,0 +1,28 @@
+# object type
+type Movie {
+  id: Int!
+  title: String!
+  rating: Int!
+  description: String!
+  actors: [Actor!]!
+  category: Category!
+}
+
+type DeleteMovieDto {
+  message: String!
+}
+
+# input type
+input CreateMovieDto {
+  title: String!
+  rating: Int!
+  description: String!
+  actorIds: [Int!]!
+  categoryId: Int!
+}
+
+input UpdateMovieDto {
+  title: String
+  rating: Int
+  description: String
+}

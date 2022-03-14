@@ -1,0 +1,11 @@
+# root type
+type Query {
+  movies: [Movie!]!
+  movie(id: Int!): Movie!
+}
+
+type Mutation {
+  createMovie(createMovieInput: CreateMovieDto!): Movie!
+  updateMovie(id: Int!, updateMovieInput: UpdateMovieDto!): Movie!
+  deleteMovie(id: Int!): DeleteMovieDto!
+}
