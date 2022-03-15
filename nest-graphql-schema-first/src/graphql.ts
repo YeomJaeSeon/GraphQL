@@ -20,7 +20,7 @@ export enum Country {
     FRANCE = "FRANCE"
 }
 
-export class CreateMovieDto {
+export interface CreateMovieDto {
     title: string;
     rating: number;
     description: string;
@@ -28,13 +28,13 @@ export class CreateMovieDto {
     categoryId: number;
 }
 
-export class UpdateMovieDto {
+export interface UpdateMovieDto {
     title?: Nullable<string>;
     rating?: Nullable<number>;
     description?: Nullable<string>;
 }
 
-export class Actor {
+export interface Actor {
     id: number;
     name: string;
     gender: Gender;
@@ -44,13 +44,13 @@ export class Actor {
     movies: Movie[];
 }
 
-export class Category {
+export interface Category {
     id: number;
     name: string;
     movies: Movie[];
 }
 
-export class Movie {
+export interface Movie {
     id: number;
     title: string;
     rating: number;
@@ -59,22 +59,19 @@ export class Movie {
     category: Category;
 }
 
-export class DeleteMovieDto {
+export interface DeleteMovieDto {
     message: string;
 }
 
-export abstract class IQuery {
-    abstract movies(): Movie[] | Promise<Movie[]>;
-
-    abstract movie(id: number): Movie | Promise<Movie>;
+export interface IQuery {
+    movies(): Movie[] | Promise<Movie[]>;
+    movie(id: number): Movie | Promise<Movie>;
 }
 
-export abstract class IMutation {
-    abstract createMovie(createMovieInput: CreateMovieDto): Movie | Promise<Movie>;
-
-    abstract updateMovie(id: number, updateMovieInput: UpdateMovieDto): Movie | Promise<Movie>;
-
-    abstract deleteMovie(id: number): DeleteMovieDto | Promise<DeleteMovieDto>;
+export interface IMutation {
+    createMovie(createMovieInput: CreateMovieDto): Movie | Promise<Movie>;
+    updateMovie(id: number, updateMovieInput: UpdateMovieDto): Movie | Promise<Movie>;
+    deleteMovie(id: number): DeleteMovieDto | Promise<DeleteMovieDto>;
 }
 
 type Nullable<T> = T | null;

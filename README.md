@@ -359,13 +359,45 @@ NestJS 공식문서에 들어가서 GraphQL 탭을 누르면 어떻게 적용할
 
 > GraphQL을 이용하여 어떤 데이터를 요청할지, 어떤 데이터를 응답힐지 스키마로 정해야한다. 두 방법 모두 '스키마를 작성한다'는 목표는 같으나, 개발자 입장에서 어떤 접근법을 이용하여 스키마를 작성할지의 차이가 존재한다.
 
-### 1. schema first
-- 스키마를 이용하여 코드를 자동 생성하는 방법
-- GraphQL의 개발자가 작성한 schema를 토대로 코드가 자동으로 generate 된다.
+## 1. schema first
+> schema first 접근법은 SDL(Schema Definition Language)을 이용하여 GraphQL 스키마들을 먼저 정의한다. 네스트 프레임워크는 작성한 SDL파일을 보고, 타입스크립트 코드를 발생시킨다. 네스트가 자동적으로 스키마에 매핑되는 타입스크립트 코드를 작성하므로, 개발자는 스키마 관련 코드를 작성할 필요가 없다. by nestjs document
 
-### 2. code first
+SDL이란?
+```graphql
+# movie.graphql
+type Movie {
+  id: Int!
+  title: String!
+  rating: Int!
+  description: String!
+  actors: [Actor!]!
+  category: Category!
+}
+
+```
+
+이렇게 SDL을 작성하면 NestJS에선
+
+```typescript
+//interface로 generate 시킬수도, class로 generate 시킬수도있다.
+export interface Movie {
+    id: number;
+    title: string;
+    rating: number;
+    description: string;
+    actors: Actor[];
+    category: Category;
+}
+```
+이렇게 타입스크립트의 interface를 생성한다.
+
+
+> 클론받은 프로젝트의 'nest-graphql-schema-first' 디렉토리에 schema first접근법으로 GraphQL을 적용한 예제를 작성하였다.
+
+## 2. code first
+> code first 접근법은 데코레이터와 타입스크립트의 클래스를 이용하여 schema를 정의한다. 그러면, 네스트 프레임워크는 작성한 타입스크립트 클래스를 보고, GraphQL schema를 발생시킨다. 언어 구문간의 컨텍스트 스위칭 비용이 없기에, 타입스크립트와 데코레이터형태로 코드를 작성하는 것에만 익숙하더라도, 스키마를 쉽게 작성할 수 있다. by nestjs document
+
 - TypeScript(코드)를 이용하여 스키마를 자동 생성하는 방법
-  - typeORM의 DB 테이블에 매핑되는 엔티티(TypeScript)를 만들면 서버가 실행 될 때(런타임에), DDL이 자동으로 실행되어, 테이블을 만드는 것과 유사하다.
 - TypeScript를 이용해 GraphQL의 스키마를 만들면 네스트 서버가 실행 될때(런타임에), 파일을 쫙 살피며 자동으로 GraphQL의 스키마를 만들어준다.
 
 ```typescript
@@ -412,6 +444,55 @@ type Movie {
 GraphQL 타입(스키마)를 만들어준다.
 
 (어떤 파일을 스키마로 인식할지 경로를 정할 수도 있고, 어디 경로에 자동으로 생성할 스키마 파일을 둘지도 정할 수 있다.)
+
+> 클론받은 프로젝트의 'nest-graphql-code-first' 디렉토리에 code first접근법으로 GraphQL을 적용한 예제를 작성하였다.
+
+## 뭘 선택해야하나?
+바로 뭘 선택해야하는지 고민하기 전에, 둘의 차이에 따른 장 단점을 살펴보고, 우리 팀이 사용하기 더 좋은 접근법을 채택해야 한다고 생각한다.
+
+그럼 각각의 장, 단점 부터 살펴보자아
+
+### schema first 장점
+- 어떠한 플랫폼에도 종속이 되지 않은 SDL을 먼저 작성하는 것이 장점이다.
+  - 클라이언트 개발자와, 서버 개발자가 함께 SDL을 정의하고 그대로 코드에 붙여 사용하면 되기에 이러한 면에서 편할듯 하다.
+  - 클라이언트 개발자와 서버 개발자가 공통의 SDL을 통해 소통하는 것이 용이할 것이다.
+  - 다른 플랫폼이나 언어로 마이그레이션 할 때, SDL이 있으면 마이그레이션한 코드에서도 쉽게 적용할 수 있다.
+- 한눈에 알아보기 쉽다.
+  - SDL은 비교적 간단해서, 한눈에 알아보기 쉽다. code first의 스키마를 의미하는 데코레이터를 이용한 클래스로 어떤 스키마를 의미하는지 추론하는 것보다 당연히 쉽다고 생각한다.
+
+### schema first 단점
+- SDL을 알아야한다.
+  - SDL을 먼저 작성해야하기에 당연히 공부를 해야한다. 그만큼 개발자에겐 비용이 들 것이다.(사실 크게 어렵진 않아서 큰 문젠 아닌거같다.)
+- 타입스크립트로 리졸버를 작성할 때, GraphQL의 루트 타입에 맞춰서 작성해야하는데, 이때 개발자가 실수하기 쉽다.
+  - code first접근법은 타입스크립트의 리졸버를 통해 루트 타입도 자동으로 generate 해주기에 code first에 비해선 확실히 귀찮고, 실수할 여지도 많다.
+
+### code first 장점
+- 타입스크립트로 GraphQL 스키마를 정의하기에, 익숙하고 쉽다.
+  - TypeORM을 사용하여, DB 테이블에 매핑되는 타입스크립트의 클래스를 작성해온 나는 익숙하다고 느낌
+  - 물론 SDL을 어느정도 알아야하긴하다.
+- 타입스크립트로 만든 리졸버를 통해 루트 type(Query, Mutation)등이 만들어지기에, schema first에 비해선 개발자가 실수한 여지가 줄어든다.
+- 코드 중복을 최소화할 수 있다.
+  - schema first는 무조건 SDL과 매핑되는 코드가 generate되지만, code first는 코드부터 작성하기에, 코드 중복을 최소화할 수 있다. 이를테면, 엔티티 클래스에 GraphQL데코레이터를 붙여 object type으로 만들면, schema first를 이용할때와는 다르게 코드 중복이 일어나지 않을 것이다.
+
+### code first 단점
+- 특정 언어와 플랫폼에만 종속되기에, 다른 언어나 플랫폼에선 다른 방법으로 스키마를 정의해야한다.
+  - 클라이언트 개발자가 먼저 SDL을 정의 했더라도, 플랫폼이 다르기에 스키마에 매핑되는 코드를 하나하나 작성해야 하는 단점이 있다.
+  - 다른 플랫폼이나 언어로 마이그레이션 할때, 재사용 할수 없다.
+- 한눈에 알아보기 어렵다.
+  - 타입스크립트로된 코드를 보고, SDL을 생각해야하기에 귀찮다. (물론 SDL도 자동으로 generate되긴하지만 네스트가 실행할 때 생성이 되기에, 그 전에는 알수 없다.)
+
+> code first는 특정 플랫폼에서 코드 개발할때 schema first보다 낫다고 생각하고, schema first는 코드 개발 외적인 소통의 수단으로써 code first보다 더 낫다고 생각한다.
+
+> code first, schema first의 접근법의 차이를 보고 난 ORM을 사용할 때와, 사용하지 않고 직접 쿼리 하나하나 짜가며 개발하던 차이와 유사하다는 생각이 가장 먼저 들었다. 타입스크립트 코드로 만든 엔티티 클래스를 보고 DB 테이블을 자동으로 생성해주는 것과, DDL이 적힌 .sql파일을 통해 직접 테이블을 만들어주는 차이와 유사하달까? 🤣
+
+<details>
+
+<summary> <strong>schema first vs code first에 대한 나의 생각</strong> </summary>
+- code first를 이용하되, code first 접근법으로 개발하기전에 SDL을 먼저 정의하는 것이다. 
+
+- 개발전 사전에 클라이언트 개발자들과 함께 정의한 SDL을 통해 개발자들 끼리 소통을하고, 서버 개발을 할때 해당 SDL을 토대로 code first를 적용하면 schema first, code first의 둘 모두의 장점을 가져갈수 있다고 생각한다.
+</details>
+
 
 # 실제 카닥 서비스에 적용
 - coming soon...

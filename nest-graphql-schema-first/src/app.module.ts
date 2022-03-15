@@ -18,7 +18,7 @@ import { ActorModule } from './actor/actor.module';
       typePaths: ['./**/*.graphql'],
       definitions: {
         path: join(process.cwd(), 'src/graphql.ts'),
-        outputAs: 'class',
+        outputAs: 'interface',
       },
     }),
     TypeOrmModule.forRoot({
