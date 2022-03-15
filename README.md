@@ -87,10 +87,10 @@ query{
   - REST API를 이용한 요청: 포스트맨 Team workspace의 GraphQL example/REST API/영화 에서 요청
   - GraphQL을 이용한 요청: 포스트맨 Team workspace의 GraphQL example/GraphQL/영화 에서 요청 or localhost:3000/graphql 요청 후, graphql에서 제공하는 playground 에서 요청(docs, schema등을 제공해줌)
 
-> 코드를 보기보단, 일단 Rest API 를 이용하여 요청할 때와, GraphQL을 이용하여 요철할 때의 차이점을 몸소 느껴보자아
+> 코드를 보기보단, 일단 Rest API 를 이용하여 요청할 때와, GraphQL을 이용하여 요청할 때의 차이점을 몸소 느껴보자아
 
 # Node환경에서 GraphQL 적용해보기
-- NestJS + GraphQL을 바로 적용하려 했던 나는, 뭐가 뭘 의미하는지 몰라서 오히려 어려웠다. 노드환경에서 매우 간단한 예제로 '리졸버는 뭐고', '오브젝트 타입은 뭐고', '루트 타입은 뭐구나'.. 등을 이해하고 CRUD간단한 CRUD api를 만들어 본 뒤, NestJS + GraphQL을 적용하니 이해가 쉬웠다. 그래서 간단한 그래프큐엘을 적용해보자아.
+- NestJS + GraphQL을 바로 적용하려 했던 나는, 뭐가 뭘 의미하는지 몰라서 오히려 어려웠다. 노드환경에서 매우 간단한 예제로 '리졸버는 뭐고', '오브젝트 타입은 뭐고', '루트 타입은 뭐구나'.. 등을 이해하고 간단한 CRUD api를 만들어 본 뒤, NestJS + GraphQL을 적용하니 이해가 쉬웠다. 그래서 간단한 Nest프레임웤에서 그래프큐엘을 적용하기 전에 간단한 node환경에서 그래프큐엘을 적용해보자아.
 
 1. `cd graphql/node-graphql`
 2. yarn을 이용해 global 하게 `nodemon`라이브러리를 설치하자 `yarn global add nodemon`
