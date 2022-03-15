@@ -45,7 +45,7 @@ __decorate([
     __metadata("design:type", String)
 ], Actor.prototype, "name", void 0);
 __decorate([
-    (0, typeorm_1.Column)('enum', {
+    (0, typeorm_1.Column)({
         nullable: true,
         enum: Gender,
     }),
@@ -58,7 +58,7 @@ __decorate([
     __metadata("design:type", Number)
 ], Actor.prototype, "age", void 0);
 __decorate([
-    (0, typeorm_1.Column)('enum', {
+    (0, typeorm_1.Column)({
         nullable: true,
         enum: Country,
     }),

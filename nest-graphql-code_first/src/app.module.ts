@@ -16,12 +16,8 @@ import { ActorModule } from './actor/actor.module';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'), // code first -> graphql schema 자동생성 (typescript class를 통해)
     }),
     TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: '127.0.0.1',
-      port: 3306,
-      username: 'root',
-      password: '1234',
-      database: 'graphql',
+      type: 'sqlite',
+      database: 'ottDB',
       entities: ['dist/**/*.entity{.ts,.js}'],
       synchronize: true,
       logging: true,

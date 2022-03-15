@@ -22,7 +22,7 @@ export class Actor {
   @Column()
   name: string;
 
-  @Column('enum', {
+  @Column({
     nullable: true,
     enum: Gender,
   })
@@ -31,7 +31,7 @@ export class Actor {
   @Column({ nullable: true })
   age: number;
 
-  @Column('enum', {
+  @Column({
     nullable: true,
     enum: Country,
   })
