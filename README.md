@@ -386,7 +386,7 @@ export interface Movie {
     category: Category;
 }
 ```
-이렇게 타입스크립트의 interface를 생성한다.
+이렇게 타입스크립트의 interface를 생성한다. (런타임에 자동으로 생성됨)
 
 
 > 클론받은 프로젝트의 'nest-graphql-schema-first' 디렉토리에 schema first접근법으로 GraphQL을 적용한 예제를 작성하였다.
@@ -438,7 +438,7 @@ type Movie {
   category: Category!
 }
 ```
-GraphQL 타입(스키마)를 만들어준다.
+GraphQL 타입(스키마)를 만들어준다. (런타임에 자동으로 생성됨)
 
 (어떤 파일을 스키마로 인식할지 경로를 정할 수도 있고, 어디 경로에 자동으로 생성할 스키마 파일을 둘지도 정할 수 있다.)
 
