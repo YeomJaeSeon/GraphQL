@@ -82,13 +82,10 @@ query{
 1. `git clone https://github.com/YeomJaeSeon/GraphQL.git graphql` 
 2. `cd graphql/nest-graphql-code_first`
 3. `yarn`
-4. mysql 서버 로컬에서 실행 후 `app.module.ts`의 typeorm 설정 본인에 맞게 수정
-5. `yarn start:dev`
-6. api 요청해보기
+4. `yarn start:dev`
+5. api 요청해보기
   - REST API를 이용한 요청: 포스트맨 Team workspace의 GraphQL example/REST API/영화 에서 요청
   - GraphQL을 이용한 요청: 포스트맨 Team workspace의 GraphQL example/GraphQL/영화 에서 요청 or localhost:3000/graphql 요청 후, graphql에서 제공하는 playground 에서 요청(docs, schema등을 제공해줌)
-
-> 참고로 영화 생성하려면 배우가 있어야함. 배우,카테고리 리졸버는 따로 만들지 않았기에, 배우와 카테고리는 REST API를 이용해 생성해보자아.. (포스트맨 GraphQL example/Rest API/배우 폴더에 예시를 생성해놨음.)
 
 > 코드를 보기보단, 일단 Rest API 를 이용하여 요청할 때와, GraphQL을 이용하여 요철할 때의 차이점을 몸소 느껴보자아
 
@@ -97,7 +94,7 @@ query{
 
 1. `cd graphql/node-graphql`
 2. yarn을 이용해 global 하게 `nodemon`라이브러리를 설치하자 `yarn global add nodemon`
-3. `yarn global list` 명령어로 잘 설치 되었나 확인
+3. `yarn global list` 명령어로 `nodemon` 잘 설치 되었나 확인
 4. `yarn` 명령어로 현재 프로젝트 의존성 모듈 설치
 5. `yarn start` 명령어로 노드 어플리케이션 실행
 6. 브라우저에서 `localhost:4000/graphql`를 요청하여 schema를 보고 요청해보자.
