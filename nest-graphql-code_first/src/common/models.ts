@@ -1,7 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class DeleteMovieDto {
+export class DeleteMessage {
   @Field()
   message: string;
 }

@@ -1,26 +1,31 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Actor } from 'src/actor/entities/actor.entity';
-import { Category } from 'src/category/entities/category.entity';
+import { ActorEntity } from 'src/actor/entities/actor.entity';
+import { CategoryEntity } from 'src/category/entities/category.entity';
+import {
+  CreateMovieInput,
+  DeleteMessage,
+  Movie,
+  UpdateMovieInput,
+} from 'src/graphql';
 import { Repository } from 'typeorm';
-import { CreateMovieDto } from './dtos/create-movie.dto';
-import { GetMovieDto } from './dtos/get-movie.dto';
-import { UpdateMovieDto } from './dtos/update-movie.dto';
-import { Movie } from './entities/movie.entity';
+import { MovieEntity } from './entities/movie.entity';
 
 @Injectable()
 export class MovieService {
   constructor(
-    @InjectRepository(Movie)
-    private movieRepository: Repository<Movie>,
-    @InjectRepository(Actor)
-    private actorRepository: Repository<Actor>,
-    @InjectRepository(Category)
-    private categoryRepository: Repository<Category>,
+    @InjectRepository(MovieEntity)
+    private movieRepository: Repository<MovieEntity>,
+    @InjectRepository(ActorEntity)
+    private actorRepository: Repository<ActorEntity>,
+    @InjectRepository(CategoryEntity)
+    private categoryRepository: Repository<CategoryEntity>,
   ) {}
 
-  async create(createMovieDto: CreateMovieDto): Promise<Movie> {
-    const { title, rating, description, actorIds, categoryId } = createMovieDto;
+  // == 생성 == //
+  async create(createMovieInput: CreateMovieInput): Promise<Movie> {
+    const { title, rating, description, actorIds, categoryId } =
+      createMovieInput;
 
     const newMovie = this.movieRepository.create({
       title,
@@ -50,72 +55,83 @@ export class MovieService {
     newMovie.actors = foundActors;
     newMovie.category = foundCategory;
 
-    return await this.movieRepository.save(newMovie);
+    const savedMovieEntity = await this.movieRepository.save(newMovie);
+
+    return this.movieEntity2Movie(savedMovieEntity);
   }
 
-  async findAll(): Promise<GetMovieDto[]> {
-    const foundMovies = await this.movieRepository.find();
+  // == 모두 조회 == //
+  async findAll(): Promise<Movie[]> {
+    const foundMovieEntities = await this.movieRepository.find();
 
-    const getMovieDtos = foundMovies.map((foundMovie) =>
-      this.movie2getMovieDto(foundMovie),
+    const movies = foundMovieEntities.map((foundMovie) =>
+      this.movieEntity2Movie(foundMovie),
     );
-    return getMovieDtos;
+
+    return movies;
   }
 
-  async findById(id: number): Promise<GetMovieDto> {
-    const foundMovie = await this.movieRepository.findOne({ id });
-    if (!foundMovie) {
+  // == 하나 조회 == //
+  async findById(id: number): Promise<Movie> {
+    const foundMovieEntity = await this.movieRepository.findOne({ id });
+    if (!foundMovieEntity) {
       throw new NotFoundException(`#${id}의 영화 없음`);
     }
 
-    return this.movie2getMovieDto(foundMovie);
+    return this.movieEntity2Movie(foundMovieEntity);
   }
 
-  async update(id: number, updateMovieDto: UpdateMovieDto): Promise<Movie> {
-    const foundMovie = await this.movieRepository.findOne({ id });
+  // == 수정 == //
+  async update(id: number, updateMovieInput: UpdateMovieInput): Promise<Movie> {
+    const foundMovieEntity = await this.movieRepository.findOne({ id });
 
-    if (!foundMovie) {
+    if (!foundMovieEntity) {
       throw new NotFoundException(`#${id}의 영화 없음`);
     }
 
-    const { title, rating, description } = updateMovieDto;
+    const { title, rating, description } = updateMovieInput;
 
-    if (title) foundMovie.title = title;
-    if (rating) foundMovie.rating = rating;
-    if (description) foundMovie.description = description;
+    if (title) foundMovieEntity.title = title;
+    if (rating) foundMovieEntity.rating = rating;
+    if (description) foundMovieEntity.description = description;
 
-    return await this.movieRepository.save(foundMovie);
+    const updatedMovieEntity = await this.movieRepository.save(
+      foundMovieEntity,
+    );
+
+    return this.movieEntity2Movie(updatedMovieEntity);
   }
 
-  async delete(id: number): Promise<string> {
+  // == 삭제 == //
+  async delete(id: number): Promise<DeleteMessage> {
     const result = await this.movieRepository.delete(id);
     if (result.affected !== 1) {
       throw new NotFoundException(`#${id}의 영화 없음`);
     }
 
-    return 'DELETE SUCCESS';
+    return { message: 'DELETE SUCCESS' };
   }
 
-  // movie entity to responseDto
-  private movie2getMovieDto(foundMovie: Movie): GetMovieDto {
-    const getActorDto = foundMovie.actors.map((actor) => {
-      return {
-        id: actor.id,
-        name: actor.name,
-        gender: actor.gender,
-        country: actor.country,
-        career: actor.career,
-      };
-    });
-
+  // movie entity to movie graphql object type
+  private movieEntity2Movie(foundMovie: MovieEntity): Movie {
     return {
-      id: foundMovie.id,
+      id: String(foundMovie.id),
       title: foundMovie.title,
       rating: foundMovie.rating,
       description: foundMovie.description,
-      actors: getActorDto,
+      isGood: foundMovie.rating > 3 ? true : false,
+      actors: foundMovie.actors.map((actor) => {
+        return {
+          id: String(actor.id),
+          name: actor.name,
+          gender: actor.gender,
+          age: actor.age,
+          country: actor.country,
+          career: actor.career,
+        };
+      }),
       category: {
-        id: foundMovie.category.id,
+        id: String(foundMovie.category.id),
         name: foundMovie.category.name,
       },
     };

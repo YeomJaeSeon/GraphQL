@@ -19,7 +19,7 @@ import { ActorModule } from './actor/actor.module';
       type: 'sqlite',
       database: 'ottDB',
       entities: ['dist/**/*.entity{.ts,.js}'],
-      synchronize: true,
+      // synchronize: true,
       logging: true,
     }),
     MovieModule,

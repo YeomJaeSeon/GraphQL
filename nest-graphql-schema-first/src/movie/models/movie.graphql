@@ -1,19 +1,16 @@
 # object type
 type Movie {
-  id: Int!
+  id: ID!
   title: String!
   rating: Int!
   description: String!
+  isGood: Boolean!
   actors: [Actor!]!
   category: Category!
 }
 
-type DeleteMovieDto {
-  message: String!
-}
-
 # input type
-input CreateMovieDto {
+input CreateMovieInput {
   title: String!
   rating: Int!
   description: String!
@@ -21,7 +18,7 @@ input CreateMovieDto {
   categoryId: Int!
 }
 
-input UpdateMovieDto {
+input UpdateMovieInput {
   title: String
   rating: Int
   description: String

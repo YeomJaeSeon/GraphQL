@@ -7,8 +7,8 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { CreateMovieDto } from './dtos/create-movie.dto';
-import { UpdateMovieDto } from './dtos/update-movie.dto';
+import { CreateMovieInput } from './inputs/create-movie.input';
+import { UpdateMovieInput } from './inputs/update-movie.input';
 import { MovieService } from './movie.service';
 
 @Controller()
@@ -16,7 +16,7 @@ export class MovieController {
   constructor(private movieService: MovieService) {}
 
   @Post('movie')
-  create(@Body() createMovieDto: CreateMovieDto) {
+  create(@Body() createMovieDto: CreateMovieInput) {
     return this.movieService.create(createMovieDto);
   }
 
@@ -31,7 +31,7 @@ export class MovieController {
   }
 
   @Patch('movie/:id')
-  update(@Param('id') id: number, @Body() updateMovieDto: UpdateMovieDto) {
+  update(@Param('id') id: number, @Body() updateMovieDto: UpdateMovieInput) {
     return this.movieService.update(id, updateMovieDto);
   }
 

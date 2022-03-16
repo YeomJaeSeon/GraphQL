@@ -1,4 +1,4 @@
-import { Movie } from 'src/movie/entities/movie.entity';
+import { MovieEntity } from 'src/movie/entities/movie.entity';
 import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 export enum Gender {
@@ -14,8 +14,8 @@ export enum Country {
   FRANCE = 'FRANCE',
 }
 
-@Entity()
-export class Actor {
+@Entity('actor')
+export class ActorEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -42,6 +42,6 @@ export class Actor {
   })
   career: number;
 
-  @ManyToMany(() => Movie, (movie) => movie.actors)
-  movies: Movie[];
+  @ManyToMany(() => MovieEntity, (movie) => movie.actors)
+  movies: MovieEntity[];
 }

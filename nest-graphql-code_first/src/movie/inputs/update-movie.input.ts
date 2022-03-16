@@ -1,7 +1,7 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
 
 @InputType()
-export class UpdateMovieDto {
+export class UpdateMovieInput {
   @Field({ nullable: true })
   title?: string;
   @Field(() => Int, { nullable: true })

@@ -5,7 +5,7 @@ type Query {
 }
 
 type Mutation {
-  createMovie(createMovieInput: CreateMovieDto!): Movie!
-  updateMovie(id: Int!, updateMovieInput: UpdateMovieDto!): Movie!
-  deleteMovie(id: Int!): DeleteMovieDto!
+  createMovie(createMovieInput: CreateMovieInput!): Movie!
+  updateMovie(id: Int!, updateMovieInput: UpdateMovieInput!): Movie!
+  deleteMovie(id: Int!): DeleteMessage!
 }

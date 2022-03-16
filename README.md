@@ -388,8 +388,11 @@ export interface Movie {
 ```
 이렇게 타입스크립트의 interface를 생성한다. (런타임에 자동으로 생성됨)
 
+- 내 생각엔 schema first를 사용하면 먼저 SDL을 작성한뒤, Nest를 실행시켜 SDL에 매핑되는 타입스크립트의 코드를 generate시키고, generate된 해당 타입스크립트 코드를 이용해서 개발을 해야한다고 생각한다.
 
 > 클론받은 프로젝트의 'nest-graphql-schema-first' 디렉토리에 schema first접근법으로 GraphQL을 적용한 예제를 작성하였다.
+
+> 예제 코드는 영화 CRUD 기능을 가지고 있고 movie module에만 리졸버를 만들었다.
 
 ## 2. code first
 > code first 접근법은 데코레이터와 타입스크립트의 클래스를 이용하여 schema를 정의한다. 그러면, 네스트 프레임워크는 작성한 타입스크립트 클래스를 보고, GraphQL schema를 발생시킨다. 언어 구문간의 컨텍스트 스위칭 비용이 없기에, 타입스크립트와 데코레이터형태로 코드를 작성하는 것에만 익숙하더라도, 스키마를 쉽게 작성할 수 있다. by nestjs document
@@ -444,6 +447,8 @@ GraphQL 타입(스키마)를 만들어준다. (런타임에 자동으로 생성�
 
 > 클론받은 프로젝트의 'nest-graphql-code-first' 디렉토리에 code first접근법으로 GraphQL을 적용한 예제를 작성하였다.
 
+> 예제 코드는 영화 CRUD 기능을 가지고 있고 movie module에만 리졸버를 만들었다.
+
 ## 뭘 선택해야하나?
 바로 뭘 선택해야하는지 고민하기 전에, 둘의 차이에 따른 장 단점을 살펴보고, 우리 팀이 사용하기 더 좋은 접근법을 채택해야 한다고 생각한다.
 
@@ -460,43 +465,18 @@ GraphQL 타입(스키마)를 만들어준다. (런타임에 자동으로 생성�
 ### schema first 단점
 - SDL을 알아야한다.
   - SDL을 먼저 작성해야하기에 당연히 공부를 해야한다. 그만큼 개발자에겐 비용이 들 것이다.(사실 크게 어렵진 않아서 큰 문젠 아닌거같다.)
-- 타입스크립트로 리졸버를 작성할 때, SDL로 작성한(타입스크립트가 아닌!!!) GraphQL의 스키마에 맞춰서 작성해야하는데, 이때 개발자가 실수하기 쉽다.
-  - 이 부분은 직접 schema first로 코드를 작성해보면 가장 와닿는 부분이다. 예를들어 보자. movie GraphQL query는 Movie 오브젝트 타입을 반환한다. Movie 오브젝트 타입은 아래와 같이 SDL로 정의했다고 하자.
-  ```graphql
-  type Movie {
-  id: Int!
-  title: String!
-  rating: Int!
-  description: String!
-  actors: [Actor!]!
-  category: Category!
-  isGood: Boolean!
-  }
-  ```
-  타입스크립트가 아닌, SDL로 작성되어있다. 만약 타입스크립트 코드 내에서 isGood이란 필드를 빼고 응답하도록 만들어도 컴파일 단계에서 에러를 추출할 수 없다.(SDL !== typescript). 항상 컴파일 단계에서 에러가 나야 개발자는 실수할 여지가 줄어든다. 즉, 타입스크립트로 개발을 하는데, SDL로 작성한 스키마에 맞게 동작하도록 해야하기에 실수가 잦을 수 있다는 말이다.
-
-  code first는 타입스크립트 코드로 스키마를 작성하기에 컴파일 단계에서 에러를 찾을 수 있다.
-  (컴파일 에러는 좋은에러, 런타임 에러는 무서운 에러.. 뭐가 어디서 난 에런지 알기 힘들어..)
-
-  (물론 Nest를 실행하면 SDL을 토대로 런타임에 타입스크립트 코드가 생성이 되고 생성된 코드를 import하여 개발을 하면된다. 매번 이렇게 한번더 네스트를 실행해서 컴파일 에러를 체크할건가? 비효율적이라 생각한다.)
-
-- 코드의 중복
-  - schema first는 SDL을 토대로 무조건 타입스크립트 코드가 생성이 된다. 런타임 전에 이미 생성한 DTO로 Graphql 쿼리에 대한 응답을 하고 있었으면 같은 코드가 두개 아닌가?!
-- 런타임에 생성되는 코드로는 추가적인 작업을 할 수가 없다.
-  - 예를들어 GraphQL 타입의 객체를 생성하는 메서드를 추가하고싶다. 즉, 생성 메서드를 만들고 싶다. 그런데 schema first는 런타임에 스키마에 매핑되는 코드가 생성되기에 추가 할 수가 없다. (이 부분은 code first 장점 부분에서 비교하며 생각해보자아)
+- 런타임에 자동으로 생성되는 SDL에 매핑되는 타입스크립트 코드가 있는 파일 내에선 추가적인 작업을 할 수가 없다.
+  - 네스트가 실행 될 때마다 자동으로 생성되기에, 해당 파일 내에서 추가적인 작업을 할 수가 없다. (자동으로 생성된 파일 내에선 못하는거지, 생성된 코드를 외부에서 import하여 추가적인 작업은 할 수 있다.)
 
 ### code first 장점
 - 타입스크립트로 GraphQL 스키마를 정의하기에, 익숙하고 쉽다.
-  - TypeORM을 사용하여 데코레이터를 이용하며, DB 테이블에 매핑되는 타입스크립트의 클래스를 작성해온 나는 익숙하게 느껴졌음
+  - TypeORM을 사용하여 데코레이터를 이용하며 DB 테이블에 매핑되는 타입스크립트의 클래스를 작성해온 나는 익숙하게 느껴졌음
   - 물론 SDL을 어느정도 알아야하긴하다.
-- 타입스크립트로 만든 스키마이기에, 컴파일 단계에서 개발자가 어떤 실수를 하였는지 알기 쉬워 실수할 여지가 줄어든다.
-- 코드 중복을 최소화할 수 있다.
-  - schema first는 무조건 SDL과 매핑되는 코드가 generate되지만, code first는 코드부터 작성하기에, 코드 중복을 최소화할 수 있다(schema first에 비해서). 
-- 타입스크립트 코드로 작성한 스키마에 추가적인 작업을 할 수가 있다.
+- 타입스크립트 코드로 작성한 스키마에 추가적인 작업을 하기 쉽다. (schema first에 비해서)
   ```typescript
-  @ObjectType('Movie')
-  export class MovieType {
-    @Field(() => Int)
+  @ObjectType()
+  export class Movie {
+    @Field(() => ID)
     id: number;
 
     @Field()
@@ -508,40 +488,39 @@ GraphQL 타입(스키마)를 만들어준다. (런타임에 자동으로 생성�
     @Field()
     description: string;
 
+    @Field()
+    isGood: boolean;
+
     @Field(() => [Actor])
     actors: Actor[];
 
     @Field(() => Category)
     category: Category;
 
-    @Field()
-    isGood: boolean;
-
-    static createMovieType(
+    // == Movie 생성 메서드 == //
+    static createMovie(
       id: number,
       title: string,
       rating: number,
       description: string,
+      isGood: boolean,
       actors: Actor[],
       category: Category,
-      isGood: boolean,
-    ) {
-      const movieType = new MovieType();
-      movieType.id = id;
-      movieType.title = title;
-      movieType.rating = rating;
-      movieType.description = description;
-      movieType.actors = actors;
-      movieType.category = category;
-      movieType.isGood = isGood;
+    ): Movie {
+      const movie = new Movie();
+      movie.id = id;
+      movie.title = title;
+      movie.rating = rating;
+      movie.description = description;
+      movie.isGood = isGood;
+      movie.actors = actors;
+      movie.category = category;
 
-      return movieType;
+      return movie;
     }
   }
   ```
-  - 이렇게 추가적인 작업을 할 수가 있다!.
-
-> code first를 까면 깔수록 실제 개발을 할때, 더 유용할 거란 생각이든다.
+  - 이렇게 추가적인 작업을 하기 쉽다. 위는 Movie GraphQL object type를 의미하는 Movie 클래스에 static한 생성 메서드를 추가 했다.
 
 ### code first 단점
 - 특정 언어와 플랫폼에만 종속되기에, 다른 언어나 플랫폼에선 다른 방법으로 스키마를 정의해야한다.
@@ -550,9 +529,10 @@ GraphQL 타입(스키마)를 만들어준다. (런타임에 자동으로 생성�
 - 한눈에 알아보기 어렵다.
   - 타입스크립트로된 코드를 보고, SDL을 생각해야하기에 귀찮다. (물론 SDL도 자동으로 generate되긴하지만 네스트가 실행할 때 생성이 되기에, 그 전에는 알수 없다.)
 
-> code first는 특정 플랫폼에서 코드 개발할때 schema first보다 낫다고 생각하고, schema first는 코드 개발 외적인 소통의 수단으로써 code first보다 더 낫다고 생각한다.
+### 정리
+- schema first와 code first의 근본적인 차이는 최초에 GraphQL 스키마를 프로그래밍 코드로 작성할지, SDL로 작성할지의 차이 뿐이라고 생각한다. Nest가 최초에 작성한 것을 토대로 '프로그래밍 코드'로 auto generate시켜줄지, 'SDL'로 auto generate시켜줄지 정한다. auto generate되는 건 네스트가 실행될때, 즉 런타임에 생성이 되기에 우린 자동으로 생성된 'SDL'이나 '프로그래밍 코드'에 직접 수정을 할 수 없다. 여기에서 어떤 접근법을 사용하냐에 따라 개발하는 방법이 차이가 생기는 것이다. 나는 코드를 개발할때 좀더 장점을 많이 가져갈 수 있는 건 code first이고, 코드 개발 외적인 팀원과의 소통의 수단으론 schema first가 더 좋다고 생각한다.
 
-> code first, schema first의 접근법의 차이를 보고 난 ORM을 사용할 때와, 사용하지 않고 직접 쿼리 하나하나 짜가며 개발하던 차이와 유사하다는 생각이 가장 먼저 들었다. 타입스크립트 코드로 만든 엔티티 클래스를 보고 DB 테이블을 자동으로 생성해주는 것과, DDL이 적힌 .sql파일을 통해 직접 테이블을 만들어주는 차이와 유사하달까? 🤣
+> 어떻게 보면 "거기서 거기 아니야?" 라고 생각 할 수있다. 나도 내가 만든 예제의 코드로는 사실 큰 차이는 없다고 생각한다. 그러나 둘 간의 큰 차이는 없더라도 조그마한 차이가 나중에 프로젝트가 복잡해 질때, 큰 차이를 만들 수 있다고 생각한다. 그렇기에 처음에 팀원과 프로젝트에 적용할 접근법을 잘 정해야 나중에 큰 코 다치지 않을 거라 생각한다. 최초에 채택한 접근법으로 개발을 쭉 해오다가 '아 이 접근법은 너무 비효율적이다'라고 생각이 들어서 다른 접근법으로 바꾸려고 했지만 다른 접근법으로 바꾸기엔 너무 먼 길을 와 있을 수도 있다.
 
 <details>
 

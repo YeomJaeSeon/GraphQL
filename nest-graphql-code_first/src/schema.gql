@@ -2,29 +2,14 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Category {
-  id: Int!
-  name: String!
-  movies: [Movie!]!
-}
-
-type Movie {
-  id: Int!
-  title: String!
-  rating: Int!
-  description: String!
-  actors: [Actor!]!
-  category: Category!
-}
-
 type Actor {
-  id: Int!
+  id: ID!
   name: String!
   gender: Gender!
   age: Int!
   country: Country!
   career: Int!
-  movies: [Movie!]!
+  movies: [Movie]
 }
 
 enum Gender {
@@ -40,7 +25,23 @@ enum Country {
   FRANCE
 }
 
-type DeleteMovieDto {
+type Category {
+  id: ID!
+  name: String!
+  movies: [Movie]
+}
+
+type Movie {
+  id: ID!
+  title: String!
+  rating: Int!
+  description: String!
+  isGood: Boolean!
+  actors: [Actor!]!
+  category: Category!
+}
+
+type DeleteMessage {
   message: String!
 }
 
@@ -50,12 +51,12 @@ type Query {
 }
 
 type Mutation {
-  createMovie(createMovieInput: CreateMovieDto!): Movie!
-  updateMovie(id: Int!, updateMovieInput: UpdateMovieDto!): Movie!
-  deleteMovie(id: Int!): DeleteMovieDto!
+  createMovie(createMovieInput: CreateMovieInput!): Movie!
+  updateMovie(id: Int!, updateMovieInput: UpdateMovieInput!): Movie!
+  deleteMovie(id: Int!): DeleteMessage!
 }
 
-input CreateMovieDto {
+input CreateMovieInput {
   title: String!
   rating: Int!
   description: String!
@@ -63,7 +64,7 @@ input CreateMovieDto {
   categoryId: Int!
 }
 
-input UpdateMovieDto {
+input UpdateMovieInput {
   title: String
   rating: Int
   description: String

@@ -1,5 +1,5 @@
-import { Actor } from 'src/actor/entities/actor.entity';
-import { Category } from 'src/category/entities/category.entity';
+import { ActorEntity } from 'src/actor/entities/actor.entity';
+import { CategoryEntity } from 'src/category/entities/category.entity';
 import {
   Column,
   Entity,
@@ -10,8 +10,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@Entity()
-export class Movie {
+@Entity('movie')
+export class MovieEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -24,12 +24,14 @@ export class Movie {
   @Column()
   description: string;
 
-  @ManyToMany(() => Actor, (actor) => actor.movies, { eager: true })
+  @ManyToMany(() => ActorEntity, (actor) => actor.movies, { eager: true })
   @JoinTable()
-  actors: Actor[];
+  actors: ActorEntity[];
 
   //카테고리 하나만 설정가능하다고 가정
-  @ManyToOne(() => Category, (category) => category.movies, { eager: true })
+  @ManyToOne(() => CategoryEntity, (category) => category.movies, {
+    eager: true,
+  })
   @JoinColumn()
-  category: Category;
+  category: CategoryEntity;
 }

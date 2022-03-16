@@ -20,7 +20,7 @@ export enum Country {
     FRANCE = "FRANCE"
 }
 
-export interface CreateMovieDto {
+export interface CreateMovieInput {
     title: string;
     rating: number;
     description: string;
@@ -28,39 +28,40 @@ export interface CreateMovieDto {
     categoryId: number;
 }
 
-export interface UpdateMovieDto {
+export interface UpdateMovieInput {
     title?: Nullable<string>;
     rating?: Nullable<number>;
     description?: Nullable<string>;
 }
 
 export interface Actor {
-    id: number;
+    id: string;
     name: string;
     gender: Gender;
     age: number;
     country: Country;
     career: number;
-    movies: Movie[];
+    movies?: Nullable<Nullable<Movie>[]>;
 }
 
 export interface Category {
-    id: number;
+    id: string;
     name: string;
-    movies: Movie[];
+    movies?: Nullable<Nullable<Movie>[]>;
+}
+
+export interface DeleteMessage {
+    message: string;
 }
 
 export interface Movie {
-    id: number;
+    id: string;
     title: string;
     rating: number;
     description: string;
+    isGood: boolean;
     actors: Actor[];
     category: Category;
-}
-
-export interface DeleteMovieDto {
-    message: string;
 }
 
 export interface IQuery {
@@ -69,9 +70,9 @@ export interface IQuery {
 }
 
 export interface IMutation {
-    createMovie(createMovieInput: CreateMovieDto): Movie | Promise<Movie>;
-    updateMovie(id: number, updateMovieInput: UpdateMovieDto): Movie | Promise<Movie>;
-    deleteMovie(id: number): DeleteMovieDto | Promise<DeleteMovieDto>;
+    createMovie(createMovieInput: CreateMovieInput): Movie | Promise<Movie>;
+    updateMovie(id: number, updateMovieInput: UpdateMovieInput): Movie | Promise<Movie>;
+    deleteMovie(id: number): DeleteMessage | Promise<DeleteMessage>;
 }
 
 type Nullable<T> = T | null;

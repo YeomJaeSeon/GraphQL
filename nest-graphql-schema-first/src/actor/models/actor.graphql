@@ -1,12 +1,12 @@
 # object type
 type Actor {
-  id: Int!
+  id: ID!
   name: String!
   gender: Gender!
   age: Int!
   country: Country!
   career: Int!
-  movies: [Movie!]!
+  movies: [Movie]
 }
 
 enum Gender {
