@@ -388,7 +388,7 @@ export interface Movie {
 ```
 이렇게 타입스크립트의 interface를 생성한다. (런타임에 자동으로 생성됨)
 
-- (내 생각) schema first접근법으로 개발을 한다면 먼저 SDL을 작성한뒤, Nest를 실행시켜 SDL에 매핑되는 타입스크립트의 코드를 generate시키고, generate된 해당 타입스크립트 코드를 이용해서 개발을 해야한다고 생각한다.
+- schema first접근법으로 개발을 한다면 먼저 SDL을 작성한뒤, Nest를 실행시켜 SDL에 매핑되는 타입스크립트의 코드를 generate시키고, generate된 해당 타입스크립트 코드를 이용해서 개발을 해야한다고 생각한다.
 
 > 클론받은 프로젝트의 'nest-graphql-schema-first' 디렉토리에 schema first접근법으로 GraphQL을 적용한 예제를 작성하였다.
 
